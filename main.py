@@ -5,7 +5,7 @@ operation = []
 Baie = []
 Hauteur = []
 operations = []
-
+CT = [0, 0, 0]
 
 with open('1_global.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -17,14 +17,19 @@ N = int(taille[0])
 L = int(taille[1])
 H = int(taille[2])
 
+print(L)
 
 with open('1_position.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
     for row in spamreader:
         position.append(row)
-
 position = position[1:]
-#print(position)
+
+for i in range(len(position)):
+    position[i][0] = position[i][0][:3]
+    position[i][1] = int(position[i][1][1:2])
+    position[i][2] = int(position[i][2][1:2])
+
 
 with open('1_operations.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -32,7 +37,12 @@ with open('1_operations.csv', newline='') as csvfile:
         operation.append(row)
 
 operation = operation[1:]
-#print(operation)
+for i in range(len(operation)):
+    operation[i][0] = operation[i][0][:3]
+    operation[i][1] = operation[i][1][1:2]
+
+
+
 
 # for i in range(H):       #Hauteur
 #     Hauteur.append(0)
@@ -55,8 +65,8 @@ def firstfit():
                 i += 1
             ajout(op[0], i)
         else:
-            col, haut = trouvercoloneconteneur(op[0])
-            while len(Baie[col]) > haut:
+            col, haut = trouverconteneur(op[0])
+            while taillecolonne(Baie[col]) > haut:
                 deplacer(col, premierepilenonpleine())
             retrait(col)
 
@@ -64,7 +74,7 @@ def firstfit():
 
 
 def colonneplein(colonne):          #return 0 si non pleine, 1 sinon
-    if len(Baie[colonne]) >= 5:
+    if taillecolonne(Baie[colonne]) >= 5:
         return 1
     return 0
 
@@ -89,10 +99,14 @@ def deplacer(Colonneactuelle, Colonnedesire):
 
 
 def taillecolonne(colonne):
-    return len(Baie[colonne])
+    for i in range(H):
+        if i > H:
+            return H
+        if Baie[colonne][i] == [0, 0, 0]:
+            return i
 
 
-def trouvercoloneconteneur(nom):
+def trouverconteneur(nom):
     for i in range(L):
         for j in range(H):
             print(Baie[i][j])
@@ -116,7 +130,19 @@ def ecrituresol():
             spamwriter.writerow(operations[i])
 
 
+def init():
+    for j in range(H):
+        Hauteur.append(CT)
+    for i in range(L):
+        Baie.append(Hauteur)
+    print(Hauteur)
+    print(Baie)
+    for i in range(len(position)):
+        print(position[i][1])
+        Baie[position[i][1]-1][position[i][2]-1] = [position[i][0]]
 
+
+init()
 
 firstfit()
 
