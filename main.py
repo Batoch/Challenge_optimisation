@@ -6,42 +6,53 @@ operation = []
 Hauteur = []
 operations = []
 CT = [0]
+numero = 0
+
+def traitementfichier(numero):
+    global N
+    global L
+    global H
+    global Baie
+    global position
+    global operation
+
+    position = []
+    operation = []
+
+    with open(str(numero) + '_global.csv', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            taille = row
 
 
-with open('1_global.csv', newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    for row in spamreader:
-        taille = row
+    N = int(taille[0])
+    L = int(taille[1])
+    H = int(taille[2])
+
+    Baie = np.zeros((L, H))
 
 
-N = int(taille[0])
-L = int(taille[1])
-H = int(taille[2])
+    with open(str(numero) + '_position.csv', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            position.append(row)
+    position = position[1:]
 
-Baie = np.zeros((L, H))
-
-
-with open('1_position.csv', newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    for row in spamreader:
-        position.append(row)
-position = position[1:]
-
-for i in range(len(position)):
-    position[i][0] = position[i][0][2:len(position[i][0])-1]
-    position[i][1] = int(position[i][1][1:2])
-    position[i][2] = int(position[i][2][1:2])
+    for i in range(len(position)):
+        position[i][0] = position[i][0][2:len(position[i][0])-1]
+        position[i][1] = int(position[i][1][1:2])
+        position[i][2] = int(position[i][2][1:2])
 
 
-with open('1_operations.csv', newline='') as csvfile:
-    spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    for row in spamreader:
-        operation.append(row)
+    with open(str(numero) + '_operations.csv', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in spamreader:
+            operation.append(row)
 
-operation = operation[1:]
-for i in range(len(operation)):
-    operation[i][0] = operation[i][0][:len(operation[i][0])-1]
-    operation[i][1] = operation[i][1][1:2]
+    operation = operation[1:]
+    for i in range(len(operation)):
+        operation[i][0] = operation[i][0][:len(operation[i][0])-1]
+        operation[i][1] = operation[i][1][1:2]
 
 
 
@@ -51,7 +62,7 @@ def firstfit():
             i = 0
             while colonneplein(i):
                 i += 1
-            ajout(op[0], i)
+            ajout(op[0][2:], i)
             operations.append([str(0) + " ", " " + str(i + 1)])
         else:
             col, haut = trouverconteneur(op[0][2:])
@@ -63,6 +74,7 @@ def firstfit():
             retrait(col)
             operations.append([str(col + 1) + " ", " " + str(0)])
         print(Baie)
+        print("\n")
 
 
 
@@ -89,6 +101,7 @@ def deplacer(Colonneactuelle, Colonnedesire):
     ajout(Baie[Colonneactuelle, taillecolonne(Colonneactuelle)-1], Colonnedesire)
     retrait(Colonneactuelle)
     operations.append([str(Colonneactuelle+1) + " ", " " + str(Colonnedesire+1)])
+    print(Baie)
 
 
 def taillecolonne(colonne):
@@ -111,8 +124,8 @@ def premierepilenonpleine(i):               #premiere pile non pleine a partir d
     return i
 
 
-def ecrituresol():
-    with open('1_solution.csv', 'w', newline='') as csvfile:
+def ecrituresol(numero):
+    with open(str(numero) + '_solution.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
         spamwriter.writerow(['FROM '] + [' TO'])
@@ -121,7 +134,6 @@ def ecrituresol():
 
 
 def init():
-
     for i in range(len(position)):
         Baie[position[i][1]-1, position[i][2]-1] = position[i][0]
 
@@ -141,7 +153,7 @@ def instance():
                             if i == L:
                                 i = i - 1
                         for j in range(taillecolonne(i)-1):
-                            if Baie[ligne, taillecolonne(colonne)-1] < Baie[i, j]:
+                            if Baie[ligne+1, taillecolonne(colonne)-1] < Baie[i, j]:
                                 a = i
                     if a != 0:
                         deplacer(colonne, a)
@@ -153,7 +165,7 @@ def instance():
                                 if u == L:
                                     u = u - 1
                             for v in range(taillecolonne(u)-1):
-                                if Baie[u, v] < Baie[ligne, taillecolonne(colonne)-1]:
+                                if Baie[u, v] < Baie[ligne+1, taillecolonne(colonne)-1]:
                                     if Baie[u, v] < tab1[0]:
                                         tab1[0] = Baie[u, v]
                                         tab1[1] = u
@@ -180,9 +192,11 @@ def instance():
 
 
 
+
+
+k = 11
+traitementfichier(k)
 init()
-
-instance()
-
-ecrituresol()
+firstfit()
+ecrituresol(k)
 
