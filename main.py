@@ -127,9 +127,59 @@ def init():
         Baie[position[i][1]-1, position[i][2]-1] = position[i][0]
 
 
+def instance():
+    for op in operation:
+        if op[1] == "R":
+            colonne, ligne = trouverconteneur(op[0])
+            if taillecolonne(Baie[colonne]) == ligne:
+                retrait(colonne)
+            else:
+                while taillecolonne(Baie[colonne]) > ligne:
+                    a = 0
+                    for i in range(L):
+                        if i == colonne:
+                            i = i+1
+                        for j in range(taillecolonne(Baie[i])):
+                            if Baie[ligne, taillecolonne(Baie[colonne])] < Baie[i, j]:
+                                a = i
+                    if a != 0:
+                        deplacer(colonne, a)
+                    else:
+                        tab1 = [0, 0]
+                        for u in range(L):
+                            if u == colonne:
+                                u = u + 1
+                            for v in range(taillecolonne(Baie[u])):
+                                if Baie[u, v] < Baie[ligne, taillecolonne(Baie[colonne])]:
+                                    if Baie[u, v] < tab1[0]:
+                                        tab1[0] = Baie[u, v]
+                                        tab1[1] = u
+                        deplacer(colonne, tab1[1])
+                retrait(colonne)
+        else:
+            b = 0
+            for i in range(L):
+                for j in range(taillecolonne(Baie[i])):
+                    if op[0] < Baie[i, j]:
+                        b = i
+            if b != 0:
+                ajout(op[0], b)
+            else:
+                tab2 = [0, 0]
+                for l in range(L):
+                    for c in range(taillecolonne(Baie[l])):
+                        if Baie[l, c] < op[0]:
+                            if Baie[l, c] < tab2[0]:
+                                tab2[0] = Baie[l, c]
+                                tab2[1] = l
+                ajout(op[0], tab2[1])
+        print(Baie)
+
+
+
 init()
 
-firstfit()
+instance()
 
 ecrituresol()
 
