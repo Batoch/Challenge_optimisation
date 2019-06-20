@@ -52,6 +52,7 @@ def firstfit():
             while colonneplein(i):
                 i += 1
             ajout(op[0], i)
+            operations.append([str(0) + " ", " " + str(i + 1)])
         else:
             col, haut = trouverconteneur(op[0][2:])
             a = taillecolonne(col)-1
@@ -61,7 +62,8 @@ def firstfit():
                 else:
                     deplacer(col, premierepilenonpleine(0))
             retrait(col)
-            print(Baie)
+            operations.append([str(col + 1) + " ", " " + str(0)])
+        print(Baie)
 
 
 
@@ -75,13 +77,11 @@ def colonneplein(colonne):          #return 0 si non pleine, 1 sinon
 def retrait(colonne):
     global operations
     Baie[colonne, taillecolonne(colonne)-1] = 0
-    operations.append([str(colonne+1) + " ", " " + str(0)])
 
 
 def ajout(cont, i):                 #ajoute le conteneur cont a la colonne i
     global operations
     Baie[i, taillecolonne(i)] = cont
-    operations.append([str(0) + " ", " " + str(i+1)])
 
 
 def deplacer(Colonneactuelle, Colonnedesire):
