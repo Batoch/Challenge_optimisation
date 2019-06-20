@@ -2,7 +2,6 @@ import csv
 import numpy as np
 from random import *
 
-
 position = []
 operation = []
 Hauteur = []
@@ -12,7 +11,6 @@ CT = [0]
 numero = 0
 nboperation = 0
 nboperationmin = 500
-
 
 
 def traitementfichier(numero):
@@ -31,13 +29,11 @@ def traitementfichier(numero):
         for row in spamreader:
             taille = row
 
-
     N = int(taille[0])
     L = int(taille[1])
     H = int(taille[2])
 
     Baie = np.zeros((L, H))
-
 
     with open(str(numero) + '_position.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -46,10 +42,9 @@ def traitementfichier(numero):
     position = position[1:]
 
     for i in range(len(position)):
-        position[i][0] = position[i][0][2:len(position[i][0])-1]
-        position[i][1] = int(position[i][1][1:len(position[i][1])-1])
+        position[i][0] = position[i][0][2:len(position[i][0]) - 1]
+        position[i][1] = int(position[i][1][1:len(position[i][1]) - 1])
         position[i][2] = int(position[i][2][1:len(position[i][2])])
-
 
     with open(str(numero) + '_operations.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -58,9 +53,8 @@ def traitementfichier(numero):
 
     operation = operation[1:]
     for i in range(len(operation)):
-        operation[i][0] = operation[i][0][:len(operation[i][0])-1]
+        operation[i][0] = operation[i][0][:len(operation[i][0]) - 1]
         operation[i][1] = operation[i][1][1:2]
-
 
 
 def firstfit():
@@ -73,11 +67,11 @@ def firstfit():
             operations.append([str(0) + " ", " " + str(i + 1)])
         else:
             col, haut = trouverconteneur(op[0][2:])
-            while taillecolonne(col)-1 > haut:
+            while taillecolonne(col) - 1 > haut:
                 if premierepilenonpleine(0) == col:
-                    temp = premierepilenonpleine(col+1)
+                    temp = premierepilenonpleine(col + 1)
                     while temp == col:
-                        temp = premierepilenonpleine(col+1)
+                        temp = premierepilenonpleine(col + 1)
                     deplacer(col, temp)
                 else:
                     temp = premierepilenonpleine(0)
@@ -87,13 +81,11 @@ def firstfit():
 
             retrait(col)
             operations.append([str(col + 1) + " ", " " + str(0)])
-        #print(Baie)
-        #print("\n")
+        # print(Baie)
+        # print("\n")
 
 
-
-
-def colonneplein(colonne):          #return 0 si non pleine, 1 sinon
+def colonneplein(colonne):  # return 0 si non pleine, 1 sinon
     global H
     if taillecolonne(colonne) >= H:
         return 1
@@ -102,10 +94,10 @@ def colonneplein(colonne):          #return 0 si non pleine, 1 sinon
 
 def retrait(colonne):
     global operations
-    Baie[colonne, taillecolonne(colonne)-1] = 0
+    Baie[colonne, taillecolonne(colonne) - 1] = 0
 
 
-def ajout(cont, i):                 #ajoute le conteneur cont a la colonne i
+def ajout(cont, i):  # ajoute le conteneur cont a la colonne i
     global operations
     Baie[i, taillecolonne(i)] = cont
 
@@ -114,11 +106,11 @@ def deplacer(Colonneactuelle, Colonnedesire):
     global operations
     global nboperation
     a = taillecolonne(Colonneactuelle)
-    ajout(Baie[Colonneactuelle, taillecolonne(Colonneactuelle)-1], Colonnedesire)
+    ajout(Baie[Colonneactuelle, taillecolonne(Colonneactuelle) - 1], Colonnedesire)
     retrait(Colonneactuelle)
-    operations.append([str(Colonneactuelle+1) + " ", " " + str(Colonnedesire+1)])
+    operations.append([str(Colonneactuelle + 1) + " ", " " + str(Colonnedesire + 1)])
     nboperation += 1
-    #print(Baie)
+    # print(Baie)
 
 
 def taillecolonne(colonne):
@@ -135,47 +127,14 @@ def trouverconteneur(nom):
                 return i, j
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def premierepilenonpleine(i):               #premiere pile non pleine a partir de la pile i
+def premierepilenonpleine(i):  # premiere pile non pleine a partir de la pile i
     global L
-    i = randint(0, L-2)
+    i = randint(0, L - 2)
     while colonneplein(i):
         i += 1
-        while i == L-1:
+        while i == L - 1:
             i = randint(0, L - 2)
     return i
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def ecrituresol(numero):
@@ -188,15 +147,14 @@ def ecrituresol(numero):
 
 
 def init():
-
     for i in range(len(position)):
         if position[i][1] == 0 and position[i][2] == 0:
             a = 0
         else:
-            Baie[position[i][1]-1, position[i][2]-1] = position[i][0]
+            Baie[position[i][1] - 1, position[i][2] - 1] = position[i][0]
 
 
-def estlepluspetit(valeur, colonne):                #val a tester, colonne a tester     return 1 si plus petit; 0 sinon
+def estlepluspetit(valeur, colonne):  # val a tester, colonne a tester     return 1 si plus petit; 0 sinon
     global H
     global Baie
     a = 1
@@ -212,33 +170,33 @@ def instance():
     for op in operation:
         if op[1] == "R":
             colonne, ligne = trouverconteneur(op[0][2:])
-            if taillecolonne(colonne) == ligne+1:
+            if taillecolonne(colonne) == ligne + 1:
                 retrait(colonne)
                 operations.append([str(colonne + 1) + " ", " " + str(0)])
             else:
-                while taillecolonne(colonne) > ligne+1:
+                while taillecolonne(colonne) > ligne + 1:
                     a = 0
-                    for i in range(L-1):
+                    for i in range(L - 1):
                         if i == colonne:
-                            i = i+1
+                            i = i + 1
                             if i == L:
                                 i = 0
-                        for j in range(taillecolonne(i)-1):
-                            if Baie[ligne, taillecolonne(colonne)-1] > Baie[i, j]:
+                        for j in range(taillecolonne(i) - 1):
+                            if Baie[ligne, taillecolonne(colonne) - 1] > Baie[i, j]:
                                 a = a + 1
                                 col = i
                     if a == taillecolonne(colonne):
                         deplacer(colonne, col)
                     else:
                         tab1 = [0, 0]
-                        for u in range(L-1):
+                        for u in range(L - 1):
                             tab1[1] = u
                             if u == colonne:
                                 u = u + 1
-                                #if u == L:
+                                # if u == L:
                                 #    u = 0
-                            for v in range(taillecolonne(u)-1):
-                                if Baie[u, v] < Baie[colonne, taillecolonne(colonne)-1]:
+                            for v in range(taillecolonne(u) - 1):
+                                if Baie[u, v] < Baie[colonne, taillecolonne(colonne) - 1]:
                                     t = 2
                                     if Baie[u, v] > tab1[0]:
                                         tab1[0] = Baie[u, v]
@@ -246,7 +204,7 @@ def instance():
                         if colonne == tab1[1]:
                             tab1[1] = colonne + 1
                             if colonneplein(colonne + 1):
-                                tab1[1] = colonne -1
+                                tab1[1] = colonne - 1
                             if colonne == 4:
                                 tab1[1] = 1
                         deplacer(colonne, tab1[1])
@@ -269,15 +227,14 @@ def instance():
                                 tab2[0] = Baie[l, c]
                                 tab2[1] = l
                 ajout(op[0], tab2[1])
-        #print(str(Baie) + "\n")
-
+        # print(str(Baie) + "\n")
 
 
 def instance2():
     for op in operation:
         if op[1] == "A":
             a = 0
-            for i in range(L-1):
+            for i in range(L - 1):
                 if estlepluspetit(op[0][2:], i):
                     a = 1
             if a != 0:
@@ -288,15 +245,15 @@ def instance2():
             operations.append([str(0) + " ", " " + str(i + 1)])
         else:
             col, haut = trouverconteneur(op[0][2:])
-            while taillecolonne(col)-1 > haut:
+            while taillecolonne(col) - 1 > haut:
                 a = 0
                 for i in range(L - 1):
-                    if estlepluspetit(taillecolonne(col)-1, i):
+                    if estlepluspetit(taillecolonne(col) - 1, i):
                         a = 1
                 if a == 1 and i != col:
                     deplacer(col, i)
                 elif premierepilenonpleine(0) == col:
-                    deplacer(col, premierepilenonpleine(col+1))
+                    deplacer(col, premierepilenonpleine(col + 1))
                 else:
                     deplacer(col, premierepilenonpleine(0))
             retrait(col)
@@ -306,29 +263,25 @@ def instance2():
 
 
 def jouer():
-    global operationsopti
-    global nboperation
-    global operations
-    global nboperationmin
-    nboperation = 0
-    operations = []
-    init()
-    firstfit()
+    for i in range(10000):
+        global operationsopti
+        global nboperation
+        global operations
+        global nboperationmin
+        nboperation = 0
+        operations = []
+        init()
+        firstfit()
 
-    if nboperation < nboperationmin:
-        nboperationmin = nboperation
-        operationsopti = operations
-        ecrituresol(k)
-        print(nboperation)
+        if nboperation < nboperationmin:
+            nboperationmin = nboperation
+            operationsopti = operations
+            ecrituresol(k)
+            print(nboperation)
 
 
-
-
-k = 15
+k = 18
 traitementfichier(k)
 print("calcul pour le " + str(k))
-for i in range(2000):
 
-    jouer()
-
-
+jouer()
