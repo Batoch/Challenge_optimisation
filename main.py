@@ -17,7 +17,6 @@ N = int(taille[0])
 L = int(taille[1])
 H = int(taille[2])
 
-print(L)
 
 with open('1_position.csv', newline='') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -26,7 +25,7 @@ with open('1_position.csv', newline='') as csvfile:
 position = position[1:]
 
 for i in range(len(position)):
-    position[i][0] = position[i][0][:3]
+    position[i][0] = position[i][0][:len(position[i][0])-1]
     position[i][1] = int(position[i][1][1:2])
     position[i][2] = int(position[i][2][1:2])
 
