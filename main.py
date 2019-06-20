@@ -322,14 +322,13 @@ def jouer():
 
 
 
-for j in range(18):
-    j+=2
-    k = j
-    traitementfichier(k)
-    print("calcul pour le" + str(k))
-    for i in range(2000):
-        try:
-            jouer()
-        except:
-            print("bite")
+k = 2
+traitementfichier(k)
+print("calcul pour le " + str(k))
+for i in range(2000):
+    try:
+        jouer()
+    except:
+        print("bite")
+        pass
 
