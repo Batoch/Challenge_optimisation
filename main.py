@@ -134,6 +134,7 @@ def ecrituresol(numero):
 
 
 def init():
+
     for i in range(len(position)):
         Baie[position[i][1]-1, position[i][2]-1] = position[i][0]
 
@@ -153,7 +154,7 @@ def instance():
                             if i == L:
                                 i = i - 1
                         for j in range(taillecolonne(i)-1):
-                            if Baie[ligne+1, taillecolonne(colonne)-1] < Baie[i, j]:
+                            if Baie[ligne, taillecolonne(colonne)-1] < Baie[i, j]:
                                 a = i
                     if a != 0:
                         deplacer(colonne, a)
@@ -165,7 +166,7 @@ def instance():
                                 if u == L:
                                     u = u - 1
                             for v in range(taillecolonne(u)-1):
-                                if Baie[u, v] < Baie[ligne+1, taillecolonne(colonne)-1]:
+                                if Baie[u, v] < Baie[ligne, taillecolonne(colonne)-1]:
                                     if Baie[u, v] < tab1[0]:
                                         tab1[0] = Baie[u, v]
                                         tab1[1] = u
@@ -184,7 +185,7 @@ def instance():
                 for l in range(L):
                     for c in range(taillecolonne(l)):
                         if Baie[l, c] < op[0]:
-                            if Baie[l, c] < tab2[0]:
+                            if Baie[l, c] <= tab2[0]:
                                 tab2[0] = Baie[l, c]
                                 tab2[1] = l
                 ajout(op[0], tab2[1])
