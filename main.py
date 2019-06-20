@@ -161,6 +161,8 @@ def premierepilenonpleine(i):               #premiere pile non pleine a partir d
     i = randint(0, L-2)
     while colonneplein(i):
         i += 1
+        while i == L-1:
+            i = randint(0, L - 2)
     return i
 
 
@@ -322,13 +324,11 @@ def jouer():
 
 
 
-k = 2
+k = 15
 traitementfichier(k)
 print("calcul pour le " + str(k))
 for i in range(2000):
-    try:
-        jouer()
-    except:
-        print("bite")
-        pass
+
+    jouer()
+
 
