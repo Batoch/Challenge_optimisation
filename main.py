@@ -130,10 +130,10 @@ def instance():
     for op in operation:
         if op[1] == "R":
             colonne, ligne = trouverconteneur(op[0][2:])
-            if taillecolonne(colonne) == ligne:
+            if taillecolonne(colonne) == ligne+1:
                 retrait(colonne)
             else:
-                while taillecolonne(colonne) > ligne:
+                while taillecolonne(colonne) > ligne+1:
                     a = 0
                     for i in range(L-1):
                         if i == colonne:
@@ -176,7 +176,7 @@ def instance():
                                 tab2[0] = Baie[l, c]
                                 tab2[1] = l
                 ajout(op[0], tab2[1])
-        print(Baie)
+        print(str(Baie) + "\n")
 
 
 
