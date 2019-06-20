@@ -55,7 +55,6 @@ def firstfit():
             operations.append([str(0) + " ", " " + str(i + 1)])
         else:
             col, haut = trouverconteneur(op[0][2:])
-            a = taillecolonne(col)-1
             while taillecolonne(col)-1 > haut:
                 if premierepilenonpleine(0) == col:
                     deplacer(col, premierepilenonpleine(col+1))
@@ -113,7 +112,7 @@ def premierepilenonpleine(i):               #premiere pile non pleine a partir d
 
 
 def ecrituresol():
-    with open('1_detailSolution.csv', 'w', newline='') as csvfile:
+    with open('1_solution.csv', 'w', newline='') as csvfile:
         spamwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
         spamwriter.writerow(['FROM '] + [' TO'])
@@ -130,27 +129,31 @@ def init():
 def instance():
     for op in operation:
         if op[1] == "R":
-            colonne, ligne = trouverconteneur(op[0])
-            if taillecolonne(Baie[colonne]) == ligne:
+            colonne, ligne = trouverconteneur(op[0][2:])
+            if taillecolonne(colonne) == ligne:
                 retrait(colonne)
             else:
-                while taillecolonne(Baie[colonne]) > ligne:
+                while taillecolonne(colonne) > ligne:
                     a = 0
-                    for i in range(L):
+                    for i in range(L-1):
                         if i == colonne:
                             i = i+1
-                        for j in range(taillecolonne(Baie[i])):
-                            if Baie[ligne, taillecolonne(Baie[colonne])] < Baie[i, j]:
+                            if i == L:
+                                i = i - 1
+                        for j in range(taillecolonne(i)-1):
+                            if Baie[ligne, taillecolonne(colonne)-1] < Baie[i, j]:
                                 a = i
                     if a != 0:
                         deplacer(colonne, a)
                     else:
                         tab1 = [0, 0]
-                        for u in range(L):
+                        for u in range(L-1):
                             if u == colonne:
                                 u = u + 1
-                            for v in range(taillecolonne(Baie[u])):
-                                if Baie[u, v] < Baie[ligne, taillecolonne(Baie[colonne])]:
+                                if u == L:
+                                    u = u - 1
+                            for v in range(taillecolonne(u)-1):
+                                if Baie[u, v] < Baie[ligne, taillecolonne(colonne)-1]:
                                     if Baie[u, v] < tab1[0]:
                                         tab1[0] = Baie[u, v]
                                         tab1[1] = u
@@ -159,7 +162,7 @@ def instance():
         else:
             b = 0
             for i in range(L):
-                for j in range(taillecolonne(Baie[i])):
+                for j in range(taillecolonne(i)):
                     if op[0] < Baie[i, j]:
                         b = i
             if b != 0:
@@ -167,7 +170,7 @@ def instance():
             else:
                 tab2 = [0, 0]
                 for l in range(L):
-                    for c in range(taillecolonne(Baie[l])):
+                    for c in range(taillecolonne(l)):
                         if Baie[l, c] < op[0]:
                             if Baie[l, c] < tab2[0]:
                                 tab2[0] = Baie[l, c]
